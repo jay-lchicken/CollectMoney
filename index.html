@@ -74,6 +74,14 @@
             height: auto;
             transition: left 0.1s ease-in-out;
         }
+        #piggybank {
+            position: absolute;
+            left: 0px;
+            bottom: 20px;
+            width: 100px;
+            height: auto;
+            transition: left 0.1s ease-in-out;
+        }
 
         #money {
             position: absolute;
@@ -112,17 +120,42 @@
             width: 90%;
 
         }
+        #picker {
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+        }
+
+        #picker:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        }
     </style>
 </head>
 <body>
 <h1 id="title">Collect Money</h1>
 <input id="username" placeholder="Username">
 <input id="interval" placeholder="Interval (Millisecond)" type="number">
+<h1 id="header">Select collector</h1>
+<select id="picker">
+    <option value="1">Piggybank</option>
+    <option value="2">Bowl</option>
+</select>
+
 <button id="pause">Pause Music</button>
 
 <button id="start">Start</button>
 <p id="instructions">To Play, You Can Press The Left/Right Arrow Key or move your pointer. Enter the interval in milliseconds for money to appear</p>
-<img id="bowl" src="6154340.png" alt="Bowl">
+<img id="piggybank" src="6154340.png" alt="Bowl">
+<img id="bowl" src="ON1120015BL.png.webp" alt="Bowl">
 <div id="score">0</div>
 <img id="money" src="ghopc4bdgj5jvqlmaasz8nsfp3ja.png" alt="Money">
 <a id="leader" href="https://jay-lchicken.github.io/Leaderboard/">Leaderboard</a>
@@ -130,10 +163,7 @@
 <audio id="background-music" src="game.mp3" loop autoplay></audio>
 
 <script>
-    document.addEventListener("mousemove", function (e) {
-        const bowl = document.getElementById("bowl");
-        bowl.style.left = e.clientX - bowl.offsetWidth / 2 + "px";
-    });
+
     document.getElementById("start").onclick = () =>{
         document.getElementById("background-music").play();
         document.getElementById("pause").style.display = "block";

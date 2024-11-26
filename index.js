@@ -2,7 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebas
 import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 var score = 0;
 var tries = 0;
-
+var collector = 1;
 const firebaseConfig = {
     apiKey: "AIzaSyD6su1cHYsxq2GXzwtJTFeTaR98gZtluK4",
     authDomain: "math-quiz-9f398.firebaseapp.com",
@@ -42,6 +42,8 @@ async function saveData(username, score, tries) {
     }
 }
 document.getElementById("score").style.display = "none";
+document.getElementById("piggybank").style.display = "none";
+
 document.getElementById("bowl").style.display = "none";
 document.getElementById("money").style.display = "none";
 document.getElementById("start").addEventListener("click", function () {
@@ -53,10 +55,20 @@ document.getElementById("start").addEventListener("click", function () {
         loadData(document.getElementById("username").value).then(function () {
             document.getElementById("score").style.display = "block";
             document.getElementById("pause").style.display = "block";
+            collector = document.getElementById("picker").value;
+            if (collector == 1) {
+                document.getElementById("piggybank").style.display = "block";
 
-            document.getElementById("bowl").style.display = "block";
+            }else{
+                document.getElementById("bowl").style.display = "block";
+
+            }
             document.getElementById("start").style.display = "none";
             document.getElementById("username").style.display = "none";
+            document.getElementById("header").style.display = "none";
+
+            document.getElementById("picker").style.display = "none";
+
             document.getElementById("title").style.display = "none";
             document.getElementById("instructions").style.display = "none";
             document.getElementById("interval").style.display = "none";
@@ -69,56 +81,72 @@ document.getElementById("start").addEventListener("click", function () {
     }
 
 });
+
 function updateScore() {
     document.getElementById("score").innerText = score+"/"+tries;
 }
+document.addEventListener("mousemove", function (e) {
+    if (collector == 1) {
+        const piggybank = document.getElementById("piggybank");
+        piggybank.style.left = e.clientX + "px";
+    }else{
+        const bowl = document.getElementById("bowl");
+        bowl.style.left = e.clientX + "px";
+    }
+});
 setInterval(updateScore, 1);
-function createMoneyClone(){
+function createMoneyClone() {
     tries++;
     const money = document.getElementById("money");
     const moneyClone = money.cloneNode(true);
     moneyClone.style.left = Math.random() * window.innerWidth + "px";
     moneyClone.style.display = "block";
     function checkCollision() {
-        const bowl = document.getElementById("bowl");
         const money = moneyClone;
-        const bowlRect = bowl.getBoundingClientRect();
+        const collectorElement = collector == 1 ? document.getElementById("piggybank") : document.getElementById("bowl");
+        const collectorRect = collectorElement.getBoundingClientRect();
         const moneyRect = money.getBoundingClientRect();
         if (
-            bowlRect.left <= moneyRect.right &&
-            bowlRect.right >= moneyRect.left &&
-            bowlRect.top <= moneyRect.bottom &&
-            bowlRect.bottom >= moneyRect.top
+            collectorRect.left <= moneyRect.right &&
+            collectorRect.right >= moneyRect.left &&
+            collectorRect.top <= moneyRect.bottom &&
+            collectorRect.bottom >= moneyRect.top
         ) {
             score++;
-            const collisionSound = new Audio("cash.mp3")
-
+            const collisionSound = new Audio("cash.mp3");
             collisionSound.play();
-
             saveData(document.getElementById("username").value, score, tries);
             loadData(document.getElementById("username").value);
-            document.getElementById("score").innerText = score+"/"+tries;
+            document.getElementById("score").innerText = score + "/" + tries;
             clearInterval(collisionInterval);
             money.remove();
         }
     }
     const collisionInterval = setInterval(checkCollision, 1);
     document.body.appendChild(moneyClone);
-
 }
 document.onkeydown = function (e) {
     if (e.key === "ArrowRight") {
-        const bowl = document.getElementById("bowl");
-        // Get the current left position of the bowl
-        const currentLeft = parseInt(window.getComputedStyle(bowl).left, 10) || 0;
-        // Move the bowl 10px to the right
-        bowl.style.left = (currentLeft + 50) + "px";
+        if (collector == 1) {
+            const piggybank = document.getElementById("piggybank");
+            const currentLeft = parseInt(window.getComputedStyle(piggybank).left, 10) || 0;
+            piggybank.style.left = (currentLeft + 50) + "px";
+        }else{
+            const piggybank = document.getElementById("bowl");
+            const currentLeft = parseInt(window.getComputedStyle(piggybank).left, 10) || 0;
+            piggybank.style.left = (currentLeft + 50) + "px";
+        }
     }
 
     if (e.key === "ArrowLeft") {
-        const bowl = document.getElementById("bowl");
-        const currentLeft = parseInt(window.getComputedStyle(bowl).left, 10) || 0;
-        // Move the bowl 10px to the left
-        bowl.style.left = (currentLeft - 50) + "px";
+        if (collector == 1) {
+            const piggybank = document.getElementById("piggybank");
+            const currentLeft = parseInt(window.getComputedStyle(piggybank).left, 10) || 0;
+            piggybank.style.left = (currentLeft + 50) - "px";
+        }else{
+            const piggybank = document.getElementById("bowl");
+            const currentLeft = parseInt(window.getComputedStyle(piggybank).left, 10) || 0;
+            piggybank.style.left = (currentLeft + 50) - "px";
+        }
     }
 };
