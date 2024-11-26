@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collect Money</title>
+    <style>
+        @font-face {
+            font-family: 'Bank';
+            src: url('Bankjob.ttf');
+        }
+        body {
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Bank;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        @keyframes floatDown {
+            0% {
+                top: 0%;
+            }
+            100% {
+                top: 100%;
+                display: none;
+            }
+        }
+
+        #title {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #start {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #start:hover {
+            background-color: #218838;
+        }
+
+        #instructions {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        #bowl {
+            position: absolute;
+            left: 0px;
+            bottom: 20px;
+            width: 100px;
+            height: auto;
+            transition: left 0.1s ease-in-out;
+        }
+
+        #money {
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            width: 50px;
+            height: auto;
+            transform: translateX(-50%);
+            animation: floatDown 5s linear forwards;
+            display: block;
+        }
+        #pause{
+            position: absolute;
+            width: auto;
+            height: auto;
+            display: block;
+            font-size: 1.2em;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            top: 10px;
+            right: 10px;
+            display: none;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        #instructions{
+            width: 90%;
+
+        }
+    </style>
+</head>
+<body>
+<h1 id="title">Collect Money</h1>
+<input id="username" placeholder="Username">
+<input id="interval" placeholder="Interval (Millisecond)" type="number">
+<button id="pause">Pause Music</button>
+
+<button id="start">Start</button>
+<p id="instructions">To Play, You Can Press The Left/Right Arrow Key or move your pointer. Enter the interval in milliseconds for money to appear</p>
+<img id="bowl" src="6154340.png" alt="Bowl">
+<div id="score">0</div>
+<img id="money" src="ghopc4bdgj5jvqlmaasz8nsfp3ja.png" alt="Money">
+<a id="leader" href="https://jay-lchicken.github.io/Leaderboard/">Leaderboard</a>
+<script src="index.js" type="module"></script>
+<audio id="background-music" src="game.mp3" loop autoplay></audio>
+
+<script>
+    document.addEventListener("mousemove", function (e) {
+        const bowl = document.getElementById("bowl");
+        bowl.style.left = e.clientX - bowl.offsetWidth / 2 + "px";
+    });
+    document.getElementById("start").onclick = () =>{
+        document.getElementById("background-music").play();
+        document.getElementById("pause").style.display = "block";
+    }
+    document.getElementById("pause").onclick = () =>{
+        const backgroundMusic = document.getElementById("background-music");
+        if (backgroundMusic.paused) {
+            backgroundMusic.play();
+            document.getElementById("pause").innerText = "Pause Music";
+        } else {
+            backgroundMusic.pause();
+            document.getElementById("pause").innerText = "Resume Music";
+
+        }
+    }
+</script>
+
+</body>
+</html>
